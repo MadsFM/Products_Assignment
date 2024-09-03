@@ -10,9 +10,14 @@ namespace API.Controller;
 public class ProductsController : ControllerBase
 {
 
+    //Create
     [HttpPost]
-    public ActionResult CreateProduct(Product product)
+    public IActionResult CreateProduct(Product product)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
         ProductService.AddProduct(product);
         return CreatedAtAction(nameof(GetAll), new { id = product.id }, product);
     }
@@ -21,4 +26,49 @@ public class ProductsController : ControllerBase
     [HttpGet]
     public ActionResult<List<Product>> GetAll() =>
         ProductService.GetAll();
+    
+    //Read specific
+    [HttpGet("{id}")]
+    public ActionResult<Product> GetById(int id)
+    {
+        var product = ProductService.GetSpecific(id);
+
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        return product;
+    }
+    
+    //Update
+    [HttpPut("{id}")]
+    public IActionResult UpdateProduct(int id, Product product)
+    {
+        if (id != product.id)
+        {
+            return BadRequest();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        var currentProduct = ProductService.GetSpecific(id);
+        if (currentProduct is null)
+        {
+            return NotFound();
+        }
+        ProductService.UpdateProduct(product);
+
+        return NoContent();
+    }
+    
+    //Delete
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        ProductService.DeleteProduct(id);
+        return NoContent();
+    }
 }

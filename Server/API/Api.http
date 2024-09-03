@@ -5,3 +5,32 @@ Accept: application/json
 
 ###
 
+POST http://localhost:9000/api/products
+Content-Type: application/json
+
+{
+  "name": "Piz",
+  "price": 89
+}
+
+###
+
+POST http://localhost:9000/api/products
+Content-Type: application/json
+
+{
+  "name": "Pizza",
+  "price": 0
+}
+
+###
+
+POST http://localhost:9000/api/products
+Content-Type: application/json
+
+{
+  "name": "Pizza",
+  "price": 65
+}
+
+
