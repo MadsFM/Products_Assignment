@@ -1,0 +1,7 @@
+
+
+GET http://localhost:9000/api/products
+Accept: application/json
+
+###
+
