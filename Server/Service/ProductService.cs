@@ -1,51 +1,72 @@
+using DataAccess;
+using Microsoft.EntityFrameworkCore;
 using Service.Models;
 
 namespace Service;
 
 public class ProductService
 {
-    public static List<Product> Products { get; }
-    static int nextId = 6;
 
-    static ProductService()
+    private readonly MyDbContext _context;
+    
+
+    public ProductService(MyDbContext context)
     {
-        Products = new List<Product>
-        {
-            new Product { id = 1, name = "Soda", price = 20.99 },
-            new Product { id = 2, name = "French Fries", price = 25.99 },
-            new Product { id = 3, name = "Burger", price = 54.49 },
-            new Product { id = 4, name = "Sandwich", price = 66.99 },
-            new Product { id = 5, name = "Cake", price = 32.99 }
-        };
+        _context = context;
     }
     
     //Create
-    public static void AddProduct(Product product)
+    public async Task<bool> AddProduct(Product product)
     {
-        product.id = nextId++;
-        Products.Add(product);
+        try
+        {
+            await _context.Products.AddAsync(product);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch(Exception ex)
+        {
+            return false;
+        }
     }
     
     //Read
-    public static List<Product> GetAll() => Products;
+    public async Task<List<Product>> GetAll() => await _context.Products.ToListAsync();
     
-    public static Product? GetSpecific(int id) => Products.FirstOrDefault(p => p.id == id);
+    public async Task<Product?> GetSpecific(int id) => await _context.Products.FindAsync(id);
+
 
     //Update
-    public static void UpdateProduct(Product product)
+    public async Task<bool> UpdateProduct(Product product)
     {
-        var index = Products.FindIndex(p => p.id == product.id);
-        if (index == -1)
-            return;
-        Products[index] = product;
+        try
+        {
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            return false;
+        }
     }
    
     //Delete
-    public static void DeleteProduct(int id)
+    public async Task<bool> DeleteProduct(int id)
     {
-        var product = GetSpecific(id);
+        var product = await GetSpecific(id);
         if (product is null)
-            return;
-        Products.Remove(product);
+            return false;
+
+        try
+        {
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
     }
 }
