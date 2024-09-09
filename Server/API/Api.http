@@ -8,12 +8,17 @@ POST http://localhost:9000/api/products
 Content-Type: application/json
 
 {
-  "productName": "Pizza",
-  "description": "Delicious cheese pizza",
+  "productName": "Hot dog",
+  "description": "Classic danish hot dog",
   "typeId": 1, 
-  "price": 65.0,
-  "stock": 3
+  "price": 35.5,
+  "stock": 90
 }
+
+
+###
+
+PUT http://localhost:9000/api/Products/1
 
 
 ###
@@ -22,3 +27,16 @@ DELETE http://localhost:9000/api/products/1
 Accept: application/json
 
 ###
+
+
+GET http://localhost:9000/api/typeCategory
+Accept: application/json
+
+###
+
+POST http://localhost:9000/api/typeCategory
+Content-Type: application/json
+
+{
+  "typeName" : "Clothes"
+}

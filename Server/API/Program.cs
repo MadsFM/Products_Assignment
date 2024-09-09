@@ -8,6 +8,7 @@ using Service.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<TypeCategoryService>();
 builder.Services.AddControllers();
 builder.Services.AddOpenApiDocument();
 builder.Services.AddProblemDetails();

@@ -7,15 +7,8 @@ namespace API.Controller;
 
 [ApiController]
 [Route("/api/[controller]")]
-public class ProductsController : ControllerBase
+public class ProductsController(ProductService productService) : ControllerBase
 {
-
-    private readonly ProductService _productService;
-
-    public ProductsController(ProductService productService)
-    {
-        _productService = productService ?? throw new ArgumentNullException(nameof(productService));
-    }
     
     
     //Create
@@ -26,7 +19,7 @@ public class ProductsController : ControllerBase
         {
             return BadRequest(ModelState);
         }
-        var success = await _productService.AddProduct(product);
+        var success = await productService.AddProduct(product);
         if (!success)
         {
             return StatusCode(500, "An error happened while creating.  ");
@@ -38,7 +31,7 @@ public class ProductsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<Product>>> GetAll()
     {
-        var products = await _productService.GetAll();
+        var products = await productService.GetAll();
         return Ok(products);
     }
         
@@ -48,7 +41,7 @@ public class ProductsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Product>> GetById(int id)
     {
-        var product = await _productService.GetSpecific(id);
+        var product = await productService.GetById(id);
 
         if (product == null)
         {
@@ -58,24 +51,24 @@ public class ProductsController : ControllerBase
     }
     
     //Update
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateProduct(int id, Product product)
+    [HttpPut("{Id}")]
+    public async Task<ActionResult> UpdateProduct(int Id, Product product)
     {
-        if (id != product.Id)
+        if (Id != product.Id)
         {
-            return BadRequest("No id found");
+            return BadRequest("Product not found");
         }
 
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-        var currentProduct = await _productService.GetSpecific(id);
+        var currentProduct = await productService.GetById(Id);
         if (currentProduct is null)
         {
             return NotFound();
         }
-        var success = await _productService.UpdateProduct(product);
+        var success = await productService.UpdateProduct(product);
         if (!success)
         {
             return StatusCode(500, "Error happened while updating");
@@ -88,15 +81,15 @@ public class ProductsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
-        var product = await _productService.GetSpecific(id);
+        var product = await productService.GetById(id);
         if (product is null)
         {
             return NotFound();
         }
-        var success = await _productService.DeleteProduct(id);
+        var success = await productService.DeleteProduct(id);
         if (!success)
         {
-            return StatusCode(500, "Error while updating");
+            return StatusCode(500, "Error while deleting");
         }
         return NoContent();
     }
