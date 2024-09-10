@@ -5,7 +5,7 @@ using Service.Models;
 namespace API.Controller;
 
 [ApiController]
-[Route("/api/[controller]")]
+[Route("/[controller]")]
 public class TypeCategoryController(TypeCategoryService typeCategoryService) : ControllerBase
 {
 

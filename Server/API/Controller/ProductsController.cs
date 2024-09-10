@@ -6,7 +6,7 @@ namespace API.Controller;
 
 
 [ApiController]
-[Route("/api/[controller]")]
+[Route("/[controller]")]
 public class ProductsController(ProductService productService) : ControllerBase
 {
     
