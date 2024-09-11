@@ -37,15 +37,15 @@ function ProductsInfo() {
                 >
                     <figure className="relative h-48 overflow-hidden rounded-t-lg">
                         <img
-                            src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp" // Replace with product image URL if available
+                            src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
                             alt={product.productName}
                             className="w-full h-full object-cover"
                         />
                     </figure>
-                    <div className="card-body text-center items-center p-4">
+                    <div className="card-body text-center p-4 flex flex-col items-center">
                         <h2 className="card-title text-blue-400 text-lg font-semibold">{product.productName}</h2>
                         <p className="text-gray-300">{product.description}</p>
-                        <div className="card-actions items-center justify-end mt-4">
+                        <div className="card-actions mt-4">
                             <button
                                 className="btn btn-primary bg-blue-600 text-white hover:bg-blue-500 transition-colors">
                                 Buy Now
